@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="npx postcss $(ProjectDir)obj\$(ConfigurationName)\net5.0\scopedcss\bundle\$(ProjectName).styles.css -r" />
+  </Target>
+
 </Project>
