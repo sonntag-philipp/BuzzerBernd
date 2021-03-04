@@ -1,5 +1,13 @@
 ﻿.buzzer {
-    @apply w-full border-none bg-red-600 text-white outline-none rounded-3xl hover:bg-red-700 active:bg-red-800 shadow-sm;
+    @apply w-full border-none text-white outline-none rounded-3xl shadow-sm;
+}
+
+.buzzer-disabled {
+    @apply bg-red-800;
+}
+
+.buzzer-enabled {
+    @apply bg-red-600 hover:bg-red-700 active:bg-red-800;
 }
 
 .buzzer-container {

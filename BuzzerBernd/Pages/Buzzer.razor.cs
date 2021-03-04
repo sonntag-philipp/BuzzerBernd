@@ -7,8 +7,9 @@ using System.Linq;
 
 namespace BuzzerBernd.Pages
 {
-    public partial class Buzzer
+    public partial class Buzzer : IDisposable
     {
+
         [Inject]
         public UserService UserService { get; init; }
 
@@ -18,11 +19,26 @@ namespace BuzzerBernd.Pages
         [Inject]
         public NavigationManager NavigationManager { get; set; }
 
+
+        private bool _disposedValue;
+
         protected override void OnAfterRender(bool firstRender)
         {
             base.OnInitialized();
             if (UserService.User == null)
                 NavigationManager.NavigateTo("/", false);
+
+            BuzzerService.ResultsChanged += BuzzerService_ResultsChanged;
+        }
+
+        private void BuzzerService_ResultsChanged(object sender, List<Buzz> e)
+        {
+            InvokeAsync(StateHasChanged);
+        }
+
+        private bool HasBuzzered()
+        {
+            return BuzzerService.Results.Any(result => result.User.Id == UserService.User.Id);
         }
 
         private void ResetResults()
@@ -32,11 +48,14 @@ namespace BuzzerBernd.Pages
 
         private void Buzz()
         {
-            BuzzerService.Results.Add(new Buzz
+            if (!HasBuzzered())
             {
-                Timestamp = DateTime.Now,
-                User = UserService.User
-            });
+                BuzzerService.AddResult(new Buzz
+                {
+                    Timestamp = DateTime.Now,
+                    User = UserService.User
+                });
+            }
         }
 
         private IEnumerable<Buzz> GetSortedResults()
@@ -45,9 +64,27 @@ namespace BuzzerBernd.Pages
             return sortedList;
         }
 
-        private string GetFormattedBuzzTime(DateTime dateTime)
+        protected virtual void Dispose(bool disposing)
         {
-            return dateTime.ToString();
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    BuzzerService.ResultsChanged -= BuzzerService_ResultsChanged;
+                    BuzzerService.Users.Remove(UserService.User);
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
