@@ -1,0 +1,33 @@
+﻿@page "/buzzer"
+
+@using Models
+
+@if (UserService.User != null)
+{
+    <div class="buzzer-container">
+        <div class="flex flex-wrap -mx-1 overflow-hidden sm:-mx-1 md:-mx-1 lg:-mx-1 xl:-mx-1">
+            <div class="my-1 px-1 w-full overflow-hidden sm:my-1 sm:px-1 md:my-1 md:px-1 md:w-1/2 lg:my-1 lg:px-1 lg:w-1/2 xl:my-1 xl:px-1 xl:w-1/2">
+                <div class="bg-gradient-to-b from-green-200 to-red-200 text-lg overflow-y-auto rounded-3xl">
+                    @foreach (Buzz buzz in GetSortedResults())
+                    {
+                        <div class="px-4 py-3 border-solid">
+                            <h1 class="font-bold m-0 p-0">@buzz.User.Name</h1>
+                            <p class="m-0 p-0">@GetFormattedBuzzTime(buzz.Timestamp)</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="my-1 px-1 w-full overflow-hidden sm:my-1 sm:px-1 md:my-1 md:px-1 md:w-1/2 lg:my-1 lg:px-1 lg:w-1/2 xl:my-1 xl:px-1 xl:w-1/2">
+                <button class="buzzer" @onclick=@(() => Buzz())>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                </button>
+                <button class="reset-button" @onclick=@(() => ResetResults())>
+                    <h1>Reset Results</h1>
+                </button>
+            </div>
+        </div>
+    </div>
+}

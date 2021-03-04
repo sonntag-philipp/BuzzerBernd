@@ -1,0 +1,11 @@
+﻿.buzzer {
+    @apply w-full border-none bg-red-600 text-white outline-none rounded-3xl hover:bg-red-700 active:bg-red-800 shadow-sm;
+}
+
+.buzzer-container {
+    @apply container flex flex-col sm:justify-start md:justify-center h-full;
+}
+
+.reset-button {
+    @apply bg-blue-600 text-white outline-none rounded-3xl hover:bg-blue-700 active:bg-blue-800 shadow-sm py-3 text-lg w-full;
+}
